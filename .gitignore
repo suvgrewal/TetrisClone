@@ -1,0 +1,49 @@
+# === Unity ===
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+MemoryCaptures/
+Recordings/
+[Pp]ackages/com.unity.package-manager-ui/
+[Pp]ackages/com.unity.collab-proxy/
+
+# === Visual Studio / Rider ===
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+.vs/
+.idea/
+
+# === OS files ===
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# === Builds ===
+*.apk
+*.aab
+*.exe
+*.app
+*.xcodeproj/
+*.xcworkspace/
+
+# === Logs ===
+*.log
+
+# === Crash Reports ===
+sysinfo.txt
