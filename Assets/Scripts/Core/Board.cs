@@ -35,6 +35,8 @@ public class Board : MonoBehaviour
             // center board offsets
             float offsetX = -(m_width - 1) / 2f;
             float offsetY = -(m_height - 1) / 2f;
+
+            offsetY += m_height / 12f;
             
             for (int y = 0; y < m_height - m_header; y++)
             {
