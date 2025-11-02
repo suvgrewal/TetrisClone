@@ -1169,6 +1169,50 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8369011950935626958, guid: 095ce52f59d0e77468a556afe285d64e, type: 3}
   m_PrefabInstance: {fileID: 8193323477542476463}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1441331272
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1441331274}
+  - component: {fileID: 1441331273}
+  m_Layer: 0
+  m_Name: GameController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1441331273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441331272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2bd88f436a683246bba4ecb4b507bd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+--- !u!4 &1441331274
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441331272}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.48271, y: -7.58166, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1460767205
 GameObject:
   m_ObjectHideFlags: 0
@@ -1717,6 +1761,58 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8369011950935626958, guid: 095ce52f59d0e77468a556afe285d64e, type: 3}
   m_PrefabInstance: {fileID: 1672252801}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1743167483
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1743167485}
+  - component: {fileID: 1743167484}
+  m_Layer: 0
+  m_Name: Spawner
+  m_TagString: Spawner
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1743167484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743167483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaca0f83f414d1048b750e62cf17833d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  m_allShapes:
+  - {fileID: 6796785701519726759, guid: 1eee3555bf0c78148bb0ca5c921f867d, type: 3}
+  - {fileID: 8600434731527037807, guid: 346df37706e0dcc4e9ec0a9ba3b911ef, type: 3}
+  - {fileID: 2394080148446603960, guid: 70517e7f47f9d6b45996e019c03bdd4b, type: 3}
+  - {fileID: 7869688239943998878, guid: 6cfa60cf2b766fd44a19fab9af2d9037, type: 3}
+  - {fileID: 681616039754978140, guid: 77ee7afbf92b1ab41b64ee648532d3ca, type: 3}
+  - {fileID: 8366765238899150827, guid: 46c72f3573f63634d876a35fbc2f10c9, type: 3}
+  - {fileID: 52880931140292317, guid: ae54e8a3b01536844b749341fcc1afd9, type: 3}
+--- !u!4 &1743167485
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743167483}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.5, y: 12.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1797414770
 GameObject:
   m_ObjectHideFlags: 0
@@ -1729,7 +1825,7 @@ GameObject:
   - component: {fileID: 1797414773}
   m_Layer: 0
   m_Name: Board
-  m_TagString: Untagged
+  m_TagString: Board
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2374,3 +2470,5 @@ SceneRoots:
   - {fileID: 1080075342}
   - {fileID: 1822056500}
   - {fileID: 236507032}
+  - {fileID: 1441331274}
+  - {fileID: 1743167485}
