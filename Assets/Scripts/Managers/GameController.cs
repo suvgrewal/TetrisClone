@@ -35,19 +35,23 @@ public class GameController : MonoBehaviour
     [Range(0.02f, 1.0f)]
     public float m_keyRepeatRateRotate = 0.20f;
 
+    public GameObject m_gameOverPanel;
+
     bool m_gameOver = false;
 
-    public GameObject m_gameOverPanel;
+    SoundManager m_soundManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //m_gameBoard = GameObject.FindWithTag("Board").GetComponent<Board>();
-        //m_spawner   = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
+        //m_gameBoard      = GameObject.FindWithTag("Board").GetComponent<Board>();
+        //m_spawner        = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
+        //m_soundManager   = GameObject.FindWithTag("SoundManager").GetComponent<SoundManager>();
 
-        m_gameBoard = GameObject.FindObjectOfType<Board>();
-        m_spawner   = GameObject.FindObjectOfType<Spawner>();
-
+        m_gameBoard    = GameObject.FindObjectOfType<Board>();
+        m_spawner      = GameObject.FindObjectOfType<Spawner>();
+        m_soundManager = GameObject.FindObjectOfType<SoundManager>();
+        
         m_keyRepeatRateLeftRight = ClampRepeatRate(m_keyRepeatRateLeftRight, lowerTimeBound, upperTimeBound);
         m_keyRepeatRateDown      = ClampRepeatRate(m_keyRepeatRateDown, lowerTimeBound, upperTimeBound);
         m_keyRepeatRateRotate    = ClampRepeatRate(m_keyRepeatRateRotate, lowerTimeBound, upperTimeBound);
@@ -59,6 +63,10 @@ public class GameController : MonoBehaviour
         if (!m_gameBoard)
         {
             Debug.LogWarning("WARNING! There is no game board defined!");
+        }
+        if (!m_soundManager)
+        {
+            Debug.LogWarning("WARNING! There is no sound manager defined!");
         }
         if (!m_spawner)
         {
@@ -92,6 +100,11 @@ public class GameController : MonoBehaviour
             if (!m_gameBoard.IsValidPosition(m_activeShape))
             {
                 m_activeShape.MoveLeft();
+                PlaySound(m_soundManager.m_errorSound);
+            }
+            else
+            {
+                PlaySound(m_soundManager.m_moveSound);
             }
         }
 
@@ -103,6 +116,11 @@ public class GameController : MonoBehaviour
             if (!m_gameBoard.IsValidPosition(m_activeShape))
             {
                 m_activeShape.MoveRight();
+                PlaySound(m_soundManager.m_errorSound);
+            }
+            else
+            {
+                PlaySound(m_soundManager.m_moveSound);
             }
         }
         
@@ -114,6 +132,11 @@ public class GameController : MonoBehaviour
             if (!m_gameBoard.IsValidPosition(m_activeShape))
             {
                 m_activeShape.RotateLeft();
+                PlaySound(m_soundManager.m_errorSound);
+            }
+            else
+            {
+                PlaySound(m_soundManager.m_moveSound);
             }
         }
 
@@ -125,6 +148,11 @@ public class GameController : MonoBehaviour
             if (!m_gameBoard.IsValidPosition(m_activeShape))
             {
                 m_activeShape.MoveUp();
+                PlaySound(m_soundManager.m_errorSound);
+            }
+            else
+            {
+                PlaySound(m_soundManager.m_moveSound, 1.0f);
             }
         }
 
@@ -156,29 +184,46 @@ public class GameController : MonoBehaviour
 
     void LandShape()
     {
+        m_activeShape.MoveUp();
+        m_gameBoard.StoreShapeInGrid(m_activeShape);
+
         // grab next shape
+        m_activeShape = m_spawner.SpawnShape();
+        
         m_timeToNextKeyLeftRight = Time.time;
         m_timeToNextKeyDown = Time.time;
         m_timeToNextKeyRotate = Time.time;
 
-        m_activeShape.MoveUp();
-        m_gameBoard.StoreShapeInGrid(m_activeShape);
-        m_activeShape = m_spawner.SpawnShape();
-
         m_gameBoard.ClearAllRows();
+
+        PlaySound(m_soundManager.m_dropSound);
+
+        if (m_gameBoard.m_completedRows > 0)
+        {
+            if (m_gameBoard.m_completedRows > 1)
+            {
+                AudioClip randomVocal = m_soundManager.GetRandomClip(m_soundManager.m_vocalClips);
+                PlaySound(randomVocal);
+            }
+
+            PlaySound(m_soundManager.m_clearRowSound);
+        }
     }
 
     void GameOver()
     {
         m_activeShape.MoveUp();
-        m_gameOver = true;
-        Debug.LogWarning(m_activeShape.name + " is over the limit");
 
 
         if (m_gameOverPanel)
         {
             m_gameOverPanel.SetActive(true);
         }
+
+        PlaySound(m_soundManager.m_gameOverSound, 5f);
+        PlaySound(m_soundManager.m_gameOverVocalClip, 5f);
+
+        m_gameOver = true;
     }
 
     public void Restart()
@@ -191,11 +236,19 @@ public class GameController : MonoBehaviour
     void Update()
     {
         // do not run if there is not a gameboard or spawner
-        if (!m_gameBoard || !m_spawner || !m_activeShape || m_gameOver)
+        if (!m_gameBoard || !m_spawner || !m_activeShape || m_gameOver || !m_soundManager)
         {
             return;
         }
 
         PlayerInput();
+    }
+
+    void PlaySound(AudioClip clip, float volMultiplier = 0.5f)
+    {
+        if (clip && m_soundManager.m_fxEnabled)
+        {
+            AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position, Mathf.Clamp(m_soundManager.m_fxVolume * volMultiplier, 0.05f, 1f));
+        }
     }
 }
