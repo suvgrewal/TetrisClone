@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Board
   - Spawner
+  - SoundManager
+  - ScoreManager
+  - Ghost
   layers:
   - Default
   - TransparentFX

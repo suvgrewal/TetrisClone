@@ -12,10 +12,18 @@ public class GameController : MonoBehaviour
     // reference to sound manager
     SoundManager m_soundManager;
 
+    // reference to score manager
+    ScoreManager m_scoreManager;
+
     // currently active shape
     Shape m_activeShape;
 
-    float m_dropInterval = 0.3f;
+    // ghost for visualization
+    Ghost m_ghost;
+
+    public float m_dropInterval = 0.2f;
+    float m_dropIntervalModded;
+    private float m_dropIntervalIncrement = 0.05f;
 
     float m_timeToDrop = 0f;
 
@@ -56,10 +64,14 @@ public class GameController : MonoBehaviour
         //m_gameBoard      = GameObject.FindWithTag("Board").GetComponent<Board>();
         //m_spawner        = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
         //m_soundManager   = GameObject.FindWithTag("SoundManager").GetComponent<SoundManager>();
+        //m_scoreManager   = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
+        //m_ghost          = GameObject.FindWithTag("Ghost").GetComponent<Ghost>();
 
-        m_gameBoard    = GameObject.FindObjectOfType<Board>();
+        m_gameBoard = GameObject.FindObjectOfType<Board>();
         m_spawner      = GameObject.FindObjectOfType<Spawner>();
         m_soundManager = GameObject.FindObjectOfType<SoundManager>();
+        m_scoreManager = GameObject.FindObjectOfType<ScoreManager>();
+        m_ghost        = GameObject.FindObjectOfType<Ghost>();
         
         m_keyRepeatRateLeftRight = ClampRepeatRate(m_keyRepeatRateLeftRight, lowerTimeBound, upperTimeBound);
         m_keyRepeatRateDown      = ClampRepeatRate(m_keyRepeatRateDown, lowerTimeBound, upperTimeBound);
@@ -76,6 +88,10 @@ public class GameController : MonoBehaviour
         if (!m_soundManager)
         {
             Debug.LogWarning("WARNING! There is no sound manager defined!");
+        }
+        if (!m_scoreManager)
+        {
+            Debug.LogWarning("WARNING! There is no score manager defined!");
         }
         if (!m_spawner)
         {
@@ -102,11 +118,13 @@ public class GameController : MonoBehaviour
         {
             m_pausePanel.SetActive(false);
         }
+
+        m_dropIntervalModded = m_dropInterval;
     }
 
     void PlayerInput()
     {
-        if (Input.GetButton("MoveRight") && (Time.time > m_timeToNextKeyLeftRight) || Input.GetButtonDown("MoveRight"))
+        if ( (Input.GetButton("MoveRight") && (Time.time > m_timeToNextKeyLeftRight)) || Input.GetButtonDown("MoveRight") )
         {
             m_activeShape.MoveRight();
             m_timeToNextKeyLeftRight = Time.time + m_keyRepeatRateLeftRight;
@@ -122,7 +140,7 @@ public class GameController : MonoBehaviour
             }
         }
 
-        else if (Input.GetButton("MoveLeft") && (Time.time > m_timeToNextKeyLeftRight) || Input.GetButtonDown("MoveLeft"))
+        else if ( (Input.GetButton("MoveLeft") && (Time.time > m_timeToNextKeyLeftRight)) || Input.GetButtonDown("MoveLeft") )
         {
             m_activeShape.MoveLeft();
             m_timeToNextKeyLeftRight = Time.time + m_keyRepeatRateLeftRight;
@@ -154,25 +172,9 @@ public class GameController : MonoBehaviour
             }
         }
 
-        else if (Input.GetButton("MoveDown") && (Time.time > m_timeToNextKeyDown) || Input.GetButtonDown("MoveDown"))
+        else if ( (Input.GetButton("MoveDown") && (Time.time > m_timeToNextKeyDown)) || (Time.time > m_timeToDrop) )
         {
-            m_activeShape.MoveDown();
-            m_timeToNextKeyDown = Time.time + m_keyRepeatRateDown;
-
-            if (!m_gameBoard.IsValidPosition(m_activeShape))
-            {
-                m_activeShape.MoveUp();
-                PlaySound(m_soundManager.m_errorSound);
-            }
-            else
-            {
-                PlaySound(m_soundManager.m_moveSound, 1.0f);
-            }
-        }
-
-        else if (Input.GetButton("MoveDown") && (Time.time > m_timeToNextKeyDown) || (Time.time > m_timeToDrop))
-        {
-            m_timeToDrop = Time.time + m_dropInterval;
+            m_timeToDrop = Time.time + m_dropIntervalModded;
             m_timeToNextKeyDown = Time.time + m_keyRepeatRateDown;
 
             m_activeShape.MoveDown();
@@ -229,10 +231,20 @@ public class GameController : MonoBehaviour
 
         if (m_gameBoard.m_completedRows > 0)
         {
-            if (m_gameBoard.m_completedRows > 1)
+            m_scoreManager.ScoreLines(m_gameBoard.m_completedRows);
+
+            if (m_scoreManager.m_didLevelUp)
             {
-                AudioClip randomVocal = m_soundManager.GetRandomClip(m_soundManager.m_vocalClips);
-                PlaySound(randomVocal);
+                PlaySound(m_soundManager.m_levelUpVocalClip);
+                m_dropIntervalModded = Mathf.Clamp(m_dropInterval - (((float) m_scoreManager.m_level - 1) * m_dropIntervalIncrement), 0.05f, 1f);
+            }
+            else
+            {
+                if (m_gameBoard.m_completedRows > 1)
+                {
+                    AudioClip randomVocal = m_soundManager.GetRandomClip(m_soundManager.m_vocalClips);
+                    PlaySound(randomVocal);
+                }
             }
 
             PlaySound(m_soundManager.m_clearRowSound);
@@ -265,7 +277,7 @@ public class GameController : MonoBehaviour
     void Update()
     {
         // do not run if there is not a gameboard or spawner
-        if (!m_gameBoard || !m_spawner || !m_activeShape || m_gameOver || !m_soundManager)
+        if (!m_gameBoard || !m_spawner || !m_activeShape || m_gameOver || !m_soundManager || !m_scoreManager)
         {
             return;
         }

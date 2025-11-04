@@ -24,7 +24,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip m_errorSound;
 
     public AudioSource m_musicSource;
-
+    
     // background music clips
     public AudioClip[] m_musicClips;
 
@@ -33,6 +33,8 @@ public class SoundManager : MonoBehaviour
     public AudioClip[] m_vocalClips;
 
     public AudioClip m_gameOverVocalClip;
+
+    public AudioClip m_levelUpVocalClip;
 
     public IconToggle m_musicIconToggle;
 

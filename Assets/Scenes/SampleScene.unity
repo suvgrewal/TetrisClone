@@ -447,6 +447,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 126356446}
   m_CullTransparentMesh: 1
+--- !u!1 &139461786
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 139461787}
+  - component: {fileID: 139461788}
+  m_Layer: 0
+  m_Name: Ghost
+  m_TagString: Ghost
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &139461787
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139461786}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.30879, y: 16.39026, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &139461788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139461786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e48012edb25018145a7674927571bbd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Ghost
 --- !u!1 &236507028
 GameObject:
   m_ObjectHideFlags: 0
@@ -679,6 +723,17 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &251431209 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1195266064661485033, guid: 095ce52f59d0e77468a556afe285d64e, type: 3}
+  m_PrefabInstance: {fileID: 8193323477542476463}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &341757535
 GameObject:
   m_ObjectHideFlags: 0
@@ -1940,6 +1995,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1010815510}
   m_CullTransparentMesh: 1
+--- !u!1 &1041653794
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1041653795}
+  - component: {fileID: 1041653796}
+  m_Layer: 0
+  m_Name: ScoreManager
+  m_TagString: ScoreManager
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1041653795
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1041653794}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2095669061}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1041653796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1041653794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c8c15a9a6742d14798e1156d862e982, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
+  m_level: 1
+  m_linesPerLevel: 1
+  m_linesText: {fileID: 251431209}
+  m_levelText: {fileID: 1523520413}
+  m_scoreText: {fileID: 565605166}
+  m_didLevelUp: 0
+  m_numDigits: 5
 --- !u!1 &1076531417 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4319286228005220216, guid: 095ce52f59d0e77468a556afe285d64e, type: 3}
@@ -2368,7 +2474,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1207652721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2996,6 +3102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2bd88f436a683246bba4ecb4b507bd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  m_dropInterval: 0.3
   m_keyRepeatRateLeftRight: 0.15
   m_keyRepeatRateDown: 0.02
   m_keyRepeatRateRotate: 0.25
@@ -3416,6 +3523,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1519887155}
   m_CullTransparentMesh: 1
+--- !u!114 &1523520413 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1195266064661485033, guid: 095ce52f59d0e77468a556afe285d64e, type: 3}
+  m_PrefabInstance: {fileID: 767844165}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1578948044
 GameObject:
   m_ObjectHideFlags: 0
@@ -3919,7 +4037,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1743167484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4513,7 +4631,7 @@ GameObject:
   - component: {fileID: 1852118027}
   m_Layer: 0
   m_Name: SoundManager
-  m_TagString: Untagged
+  m_TagString: SoundManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4565,6 +4683,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e753dc3dea92f4b1c81255878103653f, type: 3}
   - {fileID: 8300000, guid: 8b9eee15a25ac4457bc8de1db8deed46, type: 3}
   m_gameOverVocalClip: {fileID: 8300000, guid: dde698f7e18ad439d93644afcb0de99b, type: 3}
+  m_levelUpVocalClip: {fileID: 8300000, guid: 2c74626c1fb694ae6babfb9e4b3cf48e, type: 3}
   m_musicIconToggle: {fileID: 904270344}
   m_fxIconToggle: {fileID: 1076531421}
 --- !u!1 &1861670156 stripped
@@ -4934,6 +5053,7 @@ Transform:
   m_Children:
   - {fileID: 1852118026}
   - {fileID: 1441331274}
+  - {fileID: 1041653795}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2141139133
@@ -5249,3 +5369,4 @@ SceneRoots:
   - {fileID: 1743167485}
   - {fileID: 17654739}
   - {fileID: 1207652722}
+  - {fileID: 139461787}
