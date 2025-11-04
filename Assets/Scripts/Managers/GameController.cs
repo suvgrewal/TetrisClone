@@ -9,6 +9,9 @@ public class GameController : MonoBehaviour
     // reference to spawner
     Spawner m_spawner;
 
+    // reference to sound manager
+    SoundManager m_soundManager;
+
     // currently active shape
     Shape m_activeShape;
 
@@ -39,7 +42,13 @@ public class GameController : MonoBehaviour
 
     bool m_gameOver = false;
 
-    SoundManager m_soundManager;
+    public IconToggle m_rotIconToggle;
+
+    bool m_clockwise = true;
+
+    public bool m_isPaused = false;
+
+    public GameObject m_pausePanel;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -88,6 +97,11 @@ public class GameController : MonoBehaviour
         {
             m_gameOverPanel.SetActive(false);
         }
+
+        if (m_pausePanel)
+        {
+            m_pausePanel.SetActive(false);
+        }
     }
 
     void PlayerInput()
@@ -126,12 +140,12 @@ public class GameController : MonoBehaviour
         
         else if (Input.GetButtonDown("Rotate") && (Time.time > m_timeToNextKeyRotate))
         {
-            m_activeShape.RotateRight();
+            m_activeShape.RotateClockwise(m_clockwise);
             m_timeToNextKeyRotate = Time.time + m_keyRepeatRateRotate;
 
             if (!m_gameBoard.IsValidPosition(m_activeShape))
             {
-                m_activeShape.RotateLeft();
+                m_activeShape.RotateClockwise(!m_clockwise);
                 PlaySound(m_soundManager.m_errorSound);
             }
             else
@@ -174,6 +188,21 @@ public class GameController : MonoBehaviour
                     LandShape();
                 }                    
             }
+        }
+
+        else if(Input.GetButtonDown("ToggleRot"))
+        {
+            ToggleRotDirection();
+        }
+
+        else if (Input.GetButtonDown("Pause"))
+        {
+            TogglePause();
+        }
+
+        else if (Input.GetButtonDown("Restart"))
+        {
+            Restart();
         }
     }
 
@@ -228,7 +257,7 @@ public class GameController : MonoBehaviour
 
     public void Restart()
     {
-        Debug.Log("Restarted");
+        Time.timeScale = 1f;
         Application.LoadLevel(Application.loadedLevel); // reloading already loaded level
     }
 
@@ -249,6 +278,38 @@ public class GameController : MonoBehaviour
         if (clip && m_soundManager.m_fxEnabled)
         {
             AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position, Mathf.Clamp(m_soundManager.m_fxVolume * volMultiplier, 0.05f, 1f));
+        }
+    }
+
+    public void ToggleRotDirection()
+    {
+        m_clockwise = !m_clockwise;
+
+        if (m_rotIconToggle)
+        {
+            m_rotIconToggle.ToggleIcon(m_clockwise);
+        }
+    }
+
+    public void TogglePause()
+    {
+        if (m_gameOver)
+        {
+            return;
+        }
+
+        m_isPaused = !m_isPaused;
+
+        if (m_pausePanel)
+        {
+            m_pausePanel.SetActive(m_isPaused);
+
+            if (m_soundManager)
+            {
+                m_soundManager.m_musicSource.volume = (m_isPaused) ? m_soundManager.m_musicVolume * 0.25f : m_soundManager.m_musicVolume;
+            }
+
+            Time.timeScale = (m_isPaused) ? 0 : 1;
         }
     }
 }

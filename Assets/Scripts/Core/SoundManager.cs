@@ -34,6 +34,10 @@ public class SoundManager : MonoBehaviour
 
     public AudioClip m_gameOverVocalClip;
 
+    public IconToggle m_musicIconToggle;
+
+    public IconToggle m_fxIconToggle;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -91,10 +95,20 @@ public class SoundManager : MonoBehaviour
     {
         m_musicEnabled = !m_musicEnabled;
         UpdateMusic();
+
+        if (m_musicIconToggle)
+        {
+            m_musicIconToggle.ToggleIcon(m_musicEnabled);
+        }
     }
 
     public void ToggleFX()
     {
         m_fxEnabled = !m_fxEnabled;
+
+        if (m_fxIconToggle)
+        {
+            m_fxIconToggle.ToggleIcon(m_fxEnabled);
+        }
     }
 }

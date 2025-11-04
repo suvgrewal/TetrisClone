@@ -29,7 +29,7 @@ public class Shape : MonoBehaviour
         Move(new Vector3(0, -1, 0));
     }
 
-    public void RotateLeft()
+    public void RotateRight()
     {
         if (m_canRotate)
         {
@@ -37,7 +37,7 @@ public class Shape : MonoBehaviour
         }
     }
 
-    public void RotateRight()
+    public void RotateLeft()
     {
         if (m_canRotate)
         {
@@ -45,15 +45,15 @@ public class Shape : MonoBehaviour
         }
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void RotateClockwise(bool clockwise)
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (clockwise)
+        {
+            RotateRight();
+        }
+        else
+        {
+            RotateLeft();
+        }
     }
 }

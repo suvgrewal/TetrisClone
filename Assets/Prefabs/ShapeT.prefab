@@ -318,6 +318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd8d9af02c386c646b4fef7abfed1b8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shape
+  m_canRotate: 1
 --- !u!1 &8346421878014794204
 GameObject:
   m_ObjectHideFlags: 0
