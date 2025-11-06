@@ -1,59 +1,65 @@
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
-public class Shape : MonoBehaviour
-{
-    public bool m_canRotate = true;
+public class Shape : MonoBehaviour {
 
-    void Move(Vector3 moveDirection)
-    {
-        transform.position += moveDirection;
-    }
+	// turn this property off if you don't want the shape to rotate (Shape O)
+	public bool m_canRotate = true;
 
-    public void MoveLeft()
-    {
-        Move(new Vector3(-1, 0, 0));
-    }
+	// small offset to shift position while in queue
+	public Vector3 m_queueOffset;
 
-    public void MoveRight()
-    {
-        Move(new Vector3(1, 0, 0));
-    }
+	// general move method
+	void Move(Vector3 moveDirection)
+	{
+		transform.position += moveDirection;
+	}
 
-    public void MoveUp()
-    {
-        Move(new Vector3(0, 1, 0));
-    }
 
-    public void MoveDown()
-    {
-        Move(new Vector3(0, -1, 0));
-    }
+	//public methods for moving left, right, up and down, respectively
+	public void MoveLeft()
+	{
+		Move(new Vector3(-1, 0, 0));
+	}
 
-    public void RotateRight()
-    {
-        if (m_canRotate)
-        {
-            transform.Rotate(0, 0, -90);
-        }
-    }
+	public void MoveRight()
+	{
+		Move(new Vector3(1, 0, 0));
+	}
 
-    public void RotateLeft()
-    {
-        if (m_canRotate)
-        {
-            transform.Rotate(0, 0, 90);
-        }
-    }
+	public void MoveUp()
+	{
+		Move(new Vector3(0, 1, 0));
+	}
 
-    public void RotateClockwise(bool clockwise)
-    {
-        if (clockwise)
-        {
-            RotateRight();
-        }
-        else
-        {
-            RotateLeft();
-        }
-    }
+	public void MoveDown()
+	{
+		Move(new Vector3(0, -1, 0));
+	}
+
+
+	//public methods for rotating right and left
+	public void RotateRight()
+	{
+		if (m_canRotate)
+			transform.Rotate(0, 0, -90);
+	}
+	public void RotateLeft()
+	{
+		if (m_canRotate)
+			transform.Rotate(0, 0, 90);
+	}
+
+	public void RotateClockwise(bool clockwise)
+	{
+		if (clockwise)
+		{
+			RotateRight();
+		}
+		else
+		{
+			RotateLeft();
+		}
+	}
+		
 }

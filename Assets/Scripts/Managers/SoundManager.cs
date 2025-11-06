@@ -1,116 +1,135 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
-public class SoundManager : MonoBehaviour
-{
-    public bool m_musicEnabled = true;
+public class SoundManager : MonoBehaviour {
 
-    public bool m_fxEnabled = true;
+	public bool m_musicEnabled = true;
 
-    [Range(0f, 1f)]
-    public float m_musicVolume = 1.0f;
+	public bool m_fxEnabled = true;
 
-    [Range(0f, 1f)]
-    public float m_fxVolume = 1.0f;
+	[Range(0,1)]
+	public float m_musicVolume = 1.0f;
 
-    public AudioClip m_clearRowSound;
+	[Range(0,1)]
+	public float m_fxVolume = 1.0f;
 
-    public AudioClip m_moveSound;
+	public AudioClip m_clearRowSound;
 
-    public AudioClip m_dropSound;
+	public AudioClip m_moveSound;
 
-    public AudioClip m_gameOverSound;
+	public AudioClip m_dropSound;
 
-    public AudioClip m_errorSound;
+	public AudioClip m_gameOverSound;
 
-    public AudioSource m_musicSource;
-    
-    // background music clips
-    public AudioClip[] m_musicClips;
+	public AudioClip m_errorSound;
 
-    AudioClip m_randomMusicClip;
+	public AudioClip m_holdSound;
 
-    public AudioClip[] m_vocalClips;
 
-    public AudioClip m_gameOverVocalClip;
+	public AudioSource m_musicSource;
 
-    public AudioClip m_levelUpVocalClip;
+	// background music clips
+	public AudioClip[] m_musicClips;
 
-    public IconToggle m_musicIconToggle;
+	AudioClip m_randomMusicClip;
 
-    public IconToggle m_fxIconToggle;
+	public AudioClip[] m_vocalClips;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        m_randomMusicClip = GetRandomClip(m_musicClips);
-        PlayBackgroundMusic(m_randomMusicClip);
-    }
+	public AudioClip m_gameOverVocalClip;
 
-    public AudioClip GetRandomClip(AudioClip[] clips)
-    {
-        AudioClip randomClip = clips[Random.Range(0, clips.Length)];
-        return randomClip;
-    }
+	public AudioClip m_levelUpVocalClip;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	public IconToggle m_musicIconToggle;
 
-    public void PlayBackgroundMusic(AudioClip musicClip)
-    {
-        if (!m_musicEnabled || !musicClip || !m_musicSource)
-        {
-            return;
-        }
+	public IconToggle m_fxIconToggle;
 
-        m_musicSource.Stop();
+	// Use this for initialization
+	void Start () {
+		m_randomMusicClip = GetRandomClip(m_musicClips);
+		PlayBackgroundMusic (m_randomMusicClip);
 
-        m_musicSource.clip = musicClip;
+		// shorter way for playing a random music clip
+		//PlayBackgroundMusic (GetRandomClip(m_musicClips));
 
-        m_musicSource.volume = m_musicVolume;
+	}
 
-        m_musicSource.loop = true;
+	// returns a random sound from an array of AudioClips
+	public AudioClip GetRandomClip(AudioClip[] clips)
+	{
+		AudioClip randomClip = clips[Random.Range(0, clips.Length)];
+		return randomClip;
+	}
 
-        m_musicSource.Play();
-    }
 
-    void UpdateMusic()
-    {
-        if (m_musicSource.isPlaying != m_musicEnabled)
-        {
-            if (m_musicEnabled)
-            {
-                m_randomMusicClip = GetRandomClip(m_musicClips);
-                PlayBackgroundMusic(m_randomMusicClip);
-            }
-            else
-            {
-                m_musicSource.Stop();
-            }
-        }
-    }
+	public void PlayBackgroundMusic(AudioClip musicClip)
+	{
+		// return if music is disabled or if musicSource is null or is musicClip is null
+		if (!m_musicEnabled || !musicClip || !m_musicSource)
+		{
+			return;
+		}
 
-    public void ToggleMusic()
-    {
-        m_musicEnabled = !m_musicEnabled;
-        UpdateMusic();
+		// if music is playing, stop it
+		m_musicSource.Stop();
 
-        if (m_musicIconToggle)
-        {
-            m_musicIconToggle.ToggleIcon(m_musicEnabled);
-        }
-    }
+		m_musicSource.clip = musicClip;
 
-    public void ToggleFX()
-    {
-        m_fxEnabled = !m_fxEnabled;
+		// set the music volume
+		m_musicSource.volume = m_musicVolume;
 
-        if (m_fxIconToggle)
-        {
-            m_fxIconToggle.ToggleIcon(m_fxEnabled);
-        }
-    }
+		// music repeats forever
+		m_musicSource.loop = true;
+
+		// start playing
+		m_musicSource.Play();        
+	} 
+
+	// updates whether we are playing or stopping the music depending on our musicEnabled toggle
+	void UpdateMusic ()
+	{
+		if (m_musicSource.isPlaying != m_musicEnabled) 
+		{
+			if (m_musicEnabled) 
+			{
+				m_randomMusicClip = GetRandomClip(m_musicClips);
+				PlayBackgroundMusic (m_randomMusicClip);
+			}
+			else {
+				m_musicSource.Stop ();
+			}
+		}
+	}
+
+	void Update()
+	{
+
+	}
+
+	public void ToggleMusic()
+	{
+		m_musicEnabled = !m_musicEnabled;
+		UpdateMusic();
+
+		if (m_musicIconToggle)
+		{
+			m_musicIconToggle.ToggleIcon(m_musicEnabled);
+		}
+	}
+
+	public void ToggleFX()
+	{
+		m_fxEnabled = !m_fxEnabled;
+
+		if (m_fxIconToggle)
+		{
+			m_fxIconToggle.ToggleIcon(m_fxEnabled);
+		}
+
+	}
+
+
+
+
+
+
 }

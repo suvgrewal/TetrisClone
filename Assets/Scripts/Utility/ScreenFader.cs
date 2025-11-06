@@ -1,61 +1,113 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-
 using System.Collections;
+
 [RequireComponent(typeof(MaskableGraphic))]
+public class ScreenFader : MonoBehaviour {
 
-public class ScreenFader : MonoBehaviour
-{
-    public float m_startAlpha = 1f;
-    public float m_targetAlpha = 0f;
+	// our starting alpha value
+	public float m_startAlpha = 1f;
 
-    public float m_delay = 0f;
-    public float m_timeToFade = 1f;
+	// our ending alpha value
+	public float m_targetAlpha = 0f;
 
-    float m_inc = 0f;
-    float m_currentAlpha;
-    MaskableGraphic m_graphic;
-    Color m_originalColor;
+	// how long in seconds before we start the fade effect
+	public float m_delay = 0f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        m_graphic = GetComponent<MaskableGraphic>();
+	// how long it takes to change from start to target alpha values
+	public float m_timeToFade = 1f;
 
-        m_originalColor = m_graphic.color;
+	// increment applied to our alpha per frame
+	float m_inc;
 
-        m_currentAlpha = m_startAlpha;
+	// the current value of the alpha
+	float m_currentAlpha;
 
-        Color tempColor = new Color(m_originalColor.r, m_originalColor.g, m_originalColor.b, m_currentAlpha);
+	// reference to our MaskableGraphic component
+	MaskableGraphic m_graphic;
 
-        m_graphic.color = tempColor;
+	// the graphic's original color
+	Color m_originalColor;
 
-        m_inc = ((m_targetAlpha - m_startAlpha) / m_timeToFade) * Time.deltaTime;
+	// Use this for initialization
+	void Start () {
 
-        StartCoroutine("FadeRoutine");
-    }
+		// cache the Maskable Graphic
+		m_graphic = GetComponent<MaskableGraphic>();
 
-    IEnumerator FadeRoutine()
-    {
-        yield return new WaitForSeconds(m_delay);
+		// cache our graphic's original color
+		m_originalColor = m_graphic.color;
 
-        while (Mathf.Abs(m_targetAlpha - m_currentAlpha) > 0.01f)
-        {
-            yield return new WaitForEndOfFrame();
+		// set our current alpha to the starting value
+		m_currentAlpha = m_startAlpha;
 
-            m_currentAlpha = m_currentAlpha + m_inc;
+		// set the color of the graphic, based on the original rgb and current alpha value
+		Color tempColor = new Color (m_originalColor.r, m_originalColor.g, m_originalColor.b, m_currentAlpha);
+		m_graphic.color = tempColor;
 
-            Color tempColor = new Color(m_originalColor.r, m_originalColor.g, m_originalColor.b, m_currentAlpha);
+		// calculate how much we increment the alpha based on our transition time; this rate is per FRAME, note Time.deltaTime
+		m_inc = ((m_targetAlpha - m_startAlpha)/ m_timeToFade) * Time.deltaTime;
 
-            m_graphic.color = tempColor;
-        }
+		// start our coroutine
+		StartCoroutine (FadeRoutine());
+	
+		// alternate way of starting coroutine
+		//StartCoroutine("FadeRoutine");
+	}
+	
+	IEnumerator FadeRoutine()
+	{
+		// wait to begin the fade effect
+		yield return new WaitForSeconds(m_delay);
 
-        Debug.Log("SCREEN FADER finished!");
-    }
+		// 
+		while (Mathf.Abs(m_targetAlpha - m_currentAlpha) > 0.01f)
+		{
+			yield return new WaitForEndOfFrame();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+			// increment our alpha value
+			m_currentAlpha = m_currentAlpha + m_inc;
+
+			// set the color of the graphic, based on the original rgb and current alpha value
+			Color tempColor = new Color (m_originalColor.r, m_originalColor.g, m_originalColor.b, m_currentAlpha);
+			m_graphic.color = tempColor;
+
+
+		}
+
+		// 
+		//Debug.Log("SCREEN FADER finished!");
+
+
+
+
+
+	}
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+		while (Mathf.Abs(m_targetAlpha - m_startAlpha) > 0.01f)
+		{
+			yield return new WaitForEndOfFrame();
+
+			m_currentAlpha = m_currentAlpha + m_inc;
+
+			Color tempColor = new Color (m_originalColor.r, m_originalColor.g, m_originalColor.b, m_currentAlpha);
+
+			m_graphic.color = tempColor;
+
+		}
+		*/
