@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
@@ -140,8 +141,14 @@ public class GameController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
+        if (Input.GetButtonDown("Restart"))
+        {
+            Restart();
+            return;
+        }
+        
 		// if we are missing a spawner or game board or active shape, then we don't do anything
-		if (!m_spawner || !m_gameBoard || !m_activeShape || m_gameOver || !m_soundManager || !m_scoreManager)
+        if (!m_spawner || !m_gameBoard || !m_activeShape || m_gameOver || !m_soundManager || !m_scoreManager)
 		{
 			return;
 		}
@@ -354,8 +361,9 @@ public class GameController : MonoBehaviour {
 	public void Restart()
 	{
 		Time.timeScale = 1f;
-		Application.LoadLevel(Application.loadedLevel);
-	}
+        //Application.LoadLevel(Application.loadedLevel);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 
 	// plays a sound with an option volume multiplier
 	void PlaySound (AudioClip clip, float volMultiplier = 1.0f)
