@@ -71,7 +71,8 @@ public class GameController : MonoBehaviour {
 	// the panel that display when we Pause
 	public GameObject m_pausePanel;
 
-
+	// FX to play during game over
+	public ParticlePlayer m_gameOverFx;
 
 	// Use this for initialization
 	void Start () 
@@ -259,54 +260,59 @@ public class GameController : MonoBehaviour {
 	// shape lands
 	void LandShape ()
 	{
-		// move the shape up, store it in the Board's grid array
-		m_activeShape.MoveUp ();
-		m_gameBoard.StoreShapeInGrid (m_activeShape);
 
-		if (m_ghost)
+		if (m_activeShape)
 		{
-			m_ghost.Reset();
-		}
+            // move the shape up, store it in the Board's grid array
+            m_activeShape.MoveUp();
+            m_gameBoard.StoreShapeInGrid(m_activeShape);
 
-		if (m_holder)
-		{
-			m_holder.m_canRelease = true;
-		}
-		// spawn a new shape
-		m_activeShape = m_spawner.SpawnShape ();
+            m_activeShape.LandShapeFX();
 
-		// set all of the timeToNextKey variables to current time, so no input delay for the next spawned shape
-		m_timeToNextKeyLeftRight = Time.time;
-		m_timeToNextKeyDown = Time.time;
-		m_timeToNextKeyRotate = Time.time;
+            if (m_ghost)
+            {
+                m_ghost.Reset();
+            }
 
-		// remove completed rows from the board if we have any 
-		m_gameBoard.ClearAllRows();
+            if (m_holder)
+            {
+                m_holder.m_canRelease = true;
+            }
+            // spawn a new shape
+            m_activeShape = m_spawner.SpawnShape();
 
+            // set all of the timeToNextKey variables to current time, so no input delay for the next spawned shape
+            m_timeToNextKeyLeftRight = Time.time;
+            m_timeToNextKeyDown = Time.time;
+            m_timeToNextKeyRotate = Time.time;
 
-		PlaySound (m_soundManager.m_dropSound);
+            // remove completed rows from the board if we have any 
+            m_gameBoard.StartCoroutine("ClearAllRows");
+			
+            PlaySound(m_soundManager.m_dropSound);
 
-		if (m_gameBoard.m_completedRows > 0)
-		{
-			m_scoreManager.ScoreLines(m_gameBoard.m_completedRows);
+            if (m_gameBoard.m_completedRows > 0)
+            {
+                m_scoreManager.ScoreLines(m_gameBoard.m_completedRows);
 
-			if (m_scoreManager.didLevelUp)
-			{
-				m_dropIntervalModded = Mathf.Clamp(m_dropInterval - ((float)m_scoreManager.m_level * 0.05f), 0.05f, 1f);
-				PlaySound(m_soundManager.m_levelUpVocalClip);
-			}
-			else
-			{
-				if (m_gameBoard.m_completedRows > 1)
-				{
-					AudioClip randomVocal = m_soundManager.GetRandomClip(m_soundManager.m_vocalClips);
-					PlaySound(randomVocal);
-				}
-			}
+                if (m_scoreManager.didLevelUp)
+                {
+                    m_dropIntervalModded = Mathf.Clamp(m_dropInterval - ((float)m_scoreManager.m_level * 0.05f), 0.05f, 1f);
+                    PlaySound(m_soundManager.m_levelUpVocalClip);
+                }
+                else
+                {
+                    if (m_gameBoard.m_completedRows > 1)
+                    {
+                        AudioClip randomVocal = m_soundManager.GetRandomClip(m_soundManager.m_vocalClips);
+                        PlaySound(randomVocal);
+                    }
+                }
 
-			PlaySound (m_soundManager.m_clearRowSound);
-		}
-
+                PlaySound(m_soundManager.m_clearRowSound);
+            }
+        }
+		
 
 	}
 
@@ -316,12 +322,10 @@ public class GameController : MonoBehaviour {
 		// move the shape one row up
 		m_activeShape.MoveUp ();
 
-		// turn on the Game Over Panel
-		if (m_gameOverPanel) {
-			m_gameOverPanel.SetActive (true);
-		}
-		// play the failure sound effect
-		PlaySound (m_soundManager.m_gameOverSound,5f);
+		StartCoroutine("GameOverRoutine");
+
+        // play the failure sound effect
+        PlaySound(m_soundManager.m_gameOverSound,5f);
 
 		// play "game over" vocal
 		PlaySound (m_soundManager.m_gameOverVocalClip,5f);
@@ -329,6 +333,22 @@ public class GameController : MonoBehaviour {
 		// set the game over condition to true
 		m_gameOver = true;
 	}
+
+	IEnumerator GameOverRoutine()
+	{
+		if (m_gameOverFx)
+		{
+			m_gameOverFx.Play();
+		}
+
+		yield return new WaitForSeconds(0.3f);
+
+        // turn on the Game Over Panel
+        if (m_gameOverPanel)
+        {
+            m_gameOverPanel.SetActive(true);
+        }
+    }
 
 	// reload the level
 	public void Restart()

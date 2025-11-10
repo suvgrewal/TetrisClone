@@ -31,8 +31,11 @@ public class ScoreManager : MonoBehaviour {
 	// maximum number of lines we can clear if we do indeed clear any lines
 	const int m_maxLines = 4;
 
-	//
-	public bool didLevelUp = false; 
+	// whether user did level up
+	public bool didLevelUp = false;
+
+	// levelUp visual FX to play
+	public ParticlePlayer m_levelUpFx;
 
 	// update the user interface
 	void UpdateUIText()
@@ -106,6 +109,11 @@ public class ScoreManager : MonoBehaviour {
 		m_level++;
 		m_lines = m_linesPerLevel* m_level;
 		didLevelUp = true;
+
+		if (m_levelUpFx)
+		{
+			m_levelUpFx.Play();
+		}
 	}
 
 	void Start () 

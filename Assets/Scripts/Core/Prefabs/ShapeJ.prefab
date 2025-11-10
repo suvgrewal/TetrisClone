@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 5023269534663807650, guid: dd922fd2a571012418a36d14627f1127, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8fad7f86f2ab26543bc2cde69cd81560, type: 3}
   m_Color: {r: 0.13725491, g: 0.26666668, b: 0.9960785, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -169,7 +169,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 5023269534663807650, guid: dd922fd2a571012418a36d14627f1127, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8fad7f86f2ab26543bc2cde69cd81560, type: 3}
   m_Color: {r: 0.13725491, g: 0.26666668, b: 0.9960785, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -259,7 +259,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 5023269534663807650, guid: dd922fd2a571012418a36d14627f1127, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8fad7f86f2ab26543bc2cde69cd81560, type: 3}
   m_Color: {r: 0.13725491, g: 0.26666668, b: 0.9960785, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -320,6 +320,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Shape
   m_canRotate: 1
   m_queueOffset: {x: 0.25, y: 0, z: 0}
+  glowSquareTag: LandShapeFx
 --- !u!1 &7673032340045928328
 GameObject:
   m_ObjectHideFlags: 0
@@ -399,7 +400,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 5023269534663807650, guid: dd922fd2a571012418a36d14627f1127, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8fad7f86f2ab26543bc2cde69cd81560, type: 3}
   m_Color: {r: 0.13725491, g: 0.26666668, b: 0.9960785, a: 1}
   m_FlipX: 0
   m_FlipY: 0

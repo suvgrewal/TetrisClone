@@ -9,6 +9,38 @@ public class Shape : MonoBehaviour {
 	// small offset to shift position while in queue
 	public Vector3 m_queueOffset;
 
+	GameObject[] m_glowSquareFX;
+	public string glowSquareTag = "LandShapeFx";
+
+	void Start()
+	{
+		if (glowSquareTag != "")
+		{
+			m_glowSquareFX = GameObject.FindGameObjectsWithTag(glowSquareTag);
+        }
+	}
+
+	public void LandShapeFX ()
+	{
+		int i = 0;
+
+		foreach (Transform child in gameObject.transform)
+		{
+			if (m_glowSquareFX[i])
+			{
+                m_glowSquareFX[i].transform.position = new Vector3(child.position.x, child.position.y, -2f);
+				ParticlePlayer particlePlayer = m_glowSquareFX[i].GetComponent<ParticlePlayer>();
+
+				if (particlePlayer)
+				{
+					particlePlayer.Play();
+				}
+			}
+
+			i++;
+		}
+	}
+		
 	// general move method
 	void Move(Vector3 moveDirection)
 	{
