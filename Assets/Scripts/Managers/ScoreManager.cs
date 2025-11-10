@@ -4,6 +4,9 @@ using System.Collections;
 using TMPro;
 
 public class ScoreManager : MonoBehaviour {
+	// number of string elements to put in score values
+	int scoreElements = 5;
+
 	//our score
 	int m_score = 0;
 
@@ -25,6 +28,9 @@ public class ScoreManager : MonoBehaviour {
 	// text component for our Score UI
 	public TextMeshProUGUI m_scoreText;
 
+	// text component for High Score UI
+	public TextMeshProUGUI m_highScoreText;
+
 	// minimum number of lines we can clear if we do indeed clear any lines
 	const int m_minLines = 1;
 
@@ -37,8 +43,22 @@ public class ScoreManager : MonoBehaviour {
 	// levelUp visual FX to play
 	public ParticlePlayer m_levelUpFx;
 
-	// update the user interface
-	void UpdateUIText()
+	// public getter for current score
+	public int Score => m_score;
+
+    // integer value of high score
+    int m_highScore = 0;
+
+    // add this public setter
+    public void SetHighScore(int value)
+    {
+        m_highScore = value;
+        UpdateUIText();
+    }
+
+
+    // update the user interface
+    void UpdateUIText()
 	{
 		if (m_linesText)
 		{
@@ -52,7 +72,12 @@ public class ScoreManager : MonoBehaviour {
 
 		if (m_scoreText)
 		{
-			m_scoreText.text = PadZero(m_score,5);
+			m_scoreText.text = PadZero(m_score, scoreElements);
+		}
+
+		if (m_highScoreText)
+		{
+			m_highScoreText.text = PadZero(m_highScore, scoreElements);
 		}
 	}
 
@@ -119,7 +144,7 @@ public class ScoreManager : MonoBehaviour {
 	void Start () 
 	{
 		Reset();
-	}
+    }
 
 	// returns a string padded to a certain number of places
 	string PadZero(int n,int padDigits)

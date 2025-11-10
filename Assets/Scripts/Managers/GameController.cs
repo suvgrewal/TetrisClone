@@ -16,6 +16,9 @@ public class GameController : MonoBehaviour {
 	// reference to our scoreManager
 	ScoreManager m_scoreManager;
 
+	// reference to our saveManager
+	SaveManager m_saveManager;
+
 	// currently active shape
 	Shape m_activeShape;
 
@@ -69,11 +72,17 @@ public class GameController : MonoBehaviour {
 	// whether we are paused
 	public bool m_isPaused = false;
 
-	// the panel that display when we Pause
-	public GameObject m_pausePanel;
+    // the panel that display when we Pause
+    public GameObject m_pausePanel;
 
-	// FX to play during game over
-	public ParticlePlayer m_gameOverFx;
+    // whether to show high score
+    public bool m_showHighScore = false;
+
+	// high score panel
+	public GameObject m_highScorePanel;
+
+    // FX to play during game over
+    public ParticlePlayer m_gameOverFx;
 
 	// Use this for initialization
 	void Start () 
@@ -88,6 +97,7 @@ public class GameController : MonoBehaviour {
 		m_spawner = GameObject.FindObjectOfType<Spawner>();
 		m_soundManager = GameObject.FindObjectOfType<SoundManager>();
 		m_scoreManager = GameObject.FindObjectOfType<ScoreManager>();
+		m_saveManager = GameObject.FindObjectOfType<SaveManager>();
 		m_ghost = GameObject.FindObjectOfType<Ghost>();
 		m_holder = GameObject.FindObjectOfType<Holder>();
 
@@ -111,6 +121,16 @@ public class GameController : MonoBehaviour {
 			Debug.LogWarning("WARNING!  There is no score manager defined!");
 		}
 
+        if (!m_saveManager)
+        {
+            Debug.LogWarning("WARNING! There is no save manager defined!");
+        }
+		else
+		{
+            m_saveManager.LoadScore();
+            m_scoreManager.SetHighScore(m_saveManager.scoreData.highScore);
+        }
+
 		if (!m_spawner)
 		{
 			Debug.LogWarning("WARNING!  There is no spawner defined!");
@@ -125,7 +145,7 @@ public class GameController : MonoBehaviour {
 			}
 		}
 
-		if (m_gameOverPanel)
+        if (m_gameOverPanel)
 		{
 			m_gameOverPanel.SetActive(false);
 		}
@@ -134,12 +154,17 @@ public class GameController : MonoBehaviour {
 		{
 			m_pausePanel.SetActive(false);
 		}
+
+		if (m_highScorePanel)
+		{
+			m_highScorePanel.SetActive(m_showHighScore);
+		}
 			
 		m_dropIntervalModded = Mathf.Clamp(m_dropInterval - ((float)m_scoreManager.m_level * 0.1f), 0.05f, 1f);
-	}
+    }
 
-	// Update is called once per frame
-	void Update () 
+    // Update is called once per frame
+    void Update () 
 	{
         if (Input.GetButtonDown("Restart"))
         {
@@ -262,6 +287,10 @@ public class GameController : MonoBehaviour {
 		{
 			Hold();
 		}
+		else if (Input.GetButtonDown("HighScore"))
+		{
+			ToggleHighScore();
+		}
 	}
 
 	// shape lands
@@ -343,12 +372,21 @@ public class GameController : MonoBehaviour {
 
 	IEnumerator GameOverRoutine()
 	{
-		if (m_gameOverFx)
+        if (m_saveManager)
+        {
+            if (m_scoreManager.Score > m_saveManager.scoreData.highScore)
+            {
+                m_saveManager.scoreData.highScore = m_scoreManager.Score;
+                m_saveManager.SaveScore();
+            }
+        }
+
+        if (m_gameOverFx)
 		{
 			m_gameOverFx.Play();
 		}
 
-		yield return new WaitForSeconds(0.3f);
+		yield return new WaitForSeconds(0.5f);
 
         // turn on the Game Over Panel
         if (m_gameOverPanel)
@@ -452,6 +490,14 @@ public class GameController : MonoBehaviour {
 
 	}
 
+    public void ToggleHighScore()
+	{
+        m_showHighScore = !m_showHighScore;
 
+        if (m_highScorePanel) // TODO: change to component
+        {
+            m_highScorePanel.SetActive(m_showHighScore);
+        }
+    }
 
 }
