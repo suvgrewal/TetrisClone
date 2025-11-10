@@ -10,8 +10,8 @@ public class Board : MonoBehaviour {
 	// the height of the board
 	public int m_height = 30;
 
-	// width of the board
-	public int m_width = 10;
+    // width of the board
+    public int m_width = 10;
 
 	// number of rows where we won't have grid lines at the top
 	public int m_header = 8;
@@ -23,7 +23,10 @@ public class Board : MonoBehaviour {
 
 	public ParticlePlayer[] m_rowGlowFx = new ParticlePlayer[4];
 
-	void Awake()
+	// whether cleared rows cause blocks above to fall
+	public bool m_fallingBlocks = false;
+
+    void Awake()
 	{
 		m_grid = new Transform[m_width,m_height];
 	}
@@ -133,6 +136,10 @@ public class Board : MonoBehaviour {
 
 	void ShiftOneRowDown(int y)
 	{
+		if (y <= 0)
+		{
+			return;
+		}
 
 		for (int x = 0; x < m_width; ++x)
 		{
@@ -142,18 +149,22 @@ public class Board : MonoBehaviour {
 				m_grid[x,y] = null;
 				m_grid[x, y-1].position += new Vector3(0,-1,0);
 			}
-		}
+        }
 	}
+    void ShiftRowsDown(int startY)
+    {
+        for (int y = startY; y < m_height; ++y)
+        {
+            ShiftOneRowDown(y);
+        }
 
-	void ShiftRowsDown(int startY)
-	{
-		for (int i = startY; i < m_height; ++i)
-		{
-			ShiftOneRowDown(i);
-		}
-	}
+        if (m_fallingBlocks)
+        {
+            StartCoroutine(ApplyGravity());
+        }
+    }
 
-	public IEnumerator ClearAllRows()
+    public IEnumerator ClearAllRows()
 	{
 		m_completedRows = 0;
 
@@ -184,6 +195,33 @@ public class Board : MonoBehaviour {
 
 		}
 
+	}
+
+	public IEnumerator ApplyGravity()
+	{
+		bool anyMoved;
+
+		do
+		{
+			anyMoved = false;
+
+			for (int y = 1; y < m_height; y++) // start from 1
+			{
+				for (int x = 0; x < m_width; x++)
+				{
+					if (m_grid[x, y] != null && m_grid[x, y - 1] == null)
+					{
+						m_grid[x, y - 1] = m_grid[x, y];
+						m_grid[x, y] = null;
+						m_grid[x, y - 1].position = new Vector3(x, y - 1, m_grid[x, y - 1].position.z);
+						anyMoved = true;
+					}
+				}
+			}
+
+			yield return new WaitForSeconds(m_fallingBlocks ? 0.05f : 0f);
+
+		} while (anyMoved);
 	}
 
 	public bool IsOverLimit(Shape shape)

@@ -9,4 +9,6 @@ public class ScoreData
     public int totalLines;
 
     public int highestLevel;
+
+    public bool fallingBlocks = true;
 }

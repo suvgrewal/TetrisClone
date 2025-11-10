@@ -7,8 +7,8 @@ public class GameController : MonoBehaviour {
 	// reference to our board
 	Board m_gameBoard;
 
-	// reference to our spawner 
-	Spawner m_spawner;
+    // reference to our spawner 
+    Spawner m_spawner;
 
 	// reference to our soundManager
 	SoundManager m_soundManager;
@@ -84,8 +84,11 @@ public class GameController : MonoBehaviour {
     // FX to play during game over
     public ParticlePlayer m_gameOverFx;
 
-	// Use this for initialization
-	void Start () 
+    // whether blocks should fall automatically
+    public bool m_fallingBlocks;
+	
+    // Use this for initialization
+    void Start () 
 	{
 		
 		// find spawner and board with GameObject.FindWithTag plus GetComponent; make sure you tag your objects correctly
@@ -128,6 +131,10 @@ public class GameController : MonoBehaviour {
 		else
 		{
             m_saveManager.LoadScore();
+
+            m_fallingBlocks = m_saveManager.scoreData.fallingBlocks;
+			m_gameBoard.m_fallingBlocks = m_fallingBlocks;
+
             m_scoreManager.SetHighScore(m_saveManager.scoreData.highScore);
         }
 
@@ -291,10 +298,14 @@ public class GameController : MonoBehaviour {
 		{
 			ToggleHighScore();
 		}
-	}
+        else if (Input.GetButtonDown("ToggleFall"))
+        {
+			ToggleFallingBlocks();
+        }
+    }
 
-	// shape lands
-	void LandShape ()
+    // shape lands
+    void LandShape ()
 	{
 
 		if (m_activeShape)
@@ -302,6 +313,11 @@ public class GameController : MonoBehaviour {
             // move the shape up, store it in the Board's grid array
             m_activeShape.MoveUp();
             m_gameBoard.StoreShapeInGrid(m_activeShape);
+
+            if (m_gameBoard.m_fallingBlocks)
+            {
+                m_gameBoard.StartCoroutine(m_gameBoard.ApplyGravity());
+            }
 
             m_activeShape.LandShapeFX();
 
@@ -498,6 +514,18 @@ public class GameController : MonoBehaviour {
         {
             m_highScorePanel.SetActive(m_showHighScore);
         }
+    }
+
+    public void ToggleFallingBlocks()
+    {
+        m_fallingBlocks = !m_fallingBlocks;
+
+        m_saveManager.scoreData.fallingBlocks = m_fallingBlocks;
+		m_gameBoard.m_fallingBlocks = m_fallingBlocks;
+
+        m_saveManager.SaveScore();
+
+        Restart();
     }
 
 }
